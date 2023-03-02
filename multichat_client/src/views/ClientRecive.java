@@ -66,10 +66,23 @@ public class ClientRecive extends Thread {
 				refreshUsernameList((List<String>) responseDto.getBody());
 				break;
 				
+			case "enterRoomSuccessfully":
+				ClientApplication.getInstance().getMainCard().show(ClientApplication.getInstance().getMainPanel(), "roomPanel");
+				break;
+				
+			case "receiveMessage":
+				ClientApplication.getInstance().getChattingContent().append((String)responseDto.getBody() + "\n");
+				ClientApplication.getInstance().getSendMessageField().setText("");
+				break;
+				
+			case "exitRoom":
+				ClientApplication.getInstance().getChattingContent().setText("");
+				ClientApplication.getInstance().getMainCard().show(ClientApplication.getInstance().getMainPanel(), "roomListPanel");
+				break;
+				
 			default:
 				break;
 		}
-		
 	}
 	
 	private void refreshRoomList(List<Map<String, String>> roomList) {
@@ -78,12 +91,13 @@ public class ClientRecive extends Thread {
 		for(Map<String, String> roomInfo : roomList) {
 			ClientApplication.getInstance().getRoomNameListModel().addElement(roomInfo.get("roomName"));
 		}
-		
+		ClientApplication.getInstance().getRoomList().setSelectedIndex(0);
 	}
 	
 	private void refreshUsernameList(List<String> usernameList) {
 		ClientApplication.getInstance().getUsernameListModel().clear();
 		ClientApplication.getInstance().getUsernameListModel().addAll(usernameList);
+		ClientApplication.getInstance().getJoinUserList().setSelectedIndex(0);
 	}
 	
 }
